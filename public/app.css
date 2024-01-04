@@ -1,0 +1,594 @@
+html,
+body {
+	font-family: Helvetica, sans-serif;
+	padding: 0;
+	margin: 0;
+	background: #1B1B1B;
+	color: white;
+	width: 100%;
+	height: 100%;
+	margin: 0;
+	overflow: hidden;
+}
+
+.buttons-overlay {
+	position: absolute;
+	top: 0;
+	display: flex;
+	gap: 6px;
+	margin: 6px;
+}
+#buttons-overlay-left {
+	left: 0;
+}
+#buttons-overlay-right {
+	right: 0;
+}
+.buttons-overlay .button-visual {
+	transition: width 0.5s;
+}
+.buttons-overlay .button-visual .text-label {
+	transition: opacity 0.5s, max-width 0.5s;
+	overflow: hidden;
+	max-width: 300px;
+}
+@media (max-width: 720px) {
+	.buttons-overlay .button-visual .text-label {
+		opacity: 0;
+		max-width: 0;
+	}
+	.buttons-overlay .button-visual {
+		width: 32px;
+	}
+}
+
+.outer-container {
+	display: flex;
+	height: 100%;
+}
+
+.centering-container {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex: 1;
+	/*overflow-y: scroll;*/ /* always visible so page doesn't shift horizontally when scrollbar appears or disappears */
+	overflow-y: auto; /* scrollbar only visible when needed */
+
+	/* reserve space for the top buttons */
+	margin-top: 3em;
+}
+
+.app-main {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	margin: auto;
+	z-index: 1;
+}
+
+#fullscreen-target {
+	position: fixed;
+	top: 0;
+	left: 0;
+	pointer-events: none;
+}
+
+#fullscreen-target,
+#midi-viz-canvas {
+	pointer-events: none;
+}
+
+#midi-devices-area {
+	/* Prevent layout shift when devices connect, for up to a couple devices. */
+	/* Applying to a wrapper so that:
+	1. it aligns to the top (rows would stretch if applied to the table, leading to some shifting within the device list),
+	and 2. it doesn't create empty space above an error message in the case that MIDI access is unavailable. */
+	min-height: 3em;
+}
+#midi-devices {
+	min-width: 250px;
+}
+.midi-port-status:after {
+	content: "";
+	display: inline-block;
+	vertical-align: center;
+	width: 8px;
+	height: 8px;
+	border-radius: 50%;
+	background: red;
+}
+.midi-port-is-open .midi-port-status:after {
+	background: lime;
+}
+.midi-port.midi-device-is-disconnected {
+	text-decoration: line-through;
+}
+
+#troubleshoot-midi-input-button {
+	margin-top: 1em;
+}
+.popover-button {
+	/* link-style button */
+	border: 0;
+	padding: 0;
+	background: transparent;
+	color: white;
+	font-size: 1em;
+	cursor: pointer;
+	/* text-decoration: underline; applied to child with <u> to avoid underlined whitespace */
+}
+.popover {
+	z-index: 2;
+	background: #173d60;
+	color: white;
+	border: 1px solid white;
+	padding: 0.5em;
+	border-radius: 0.5em;
+	/* box-shadow: 0 0 0.5em 0.5em rgba(0, 0, 0, 0.5); */
+	/* --arrow-size: 4px; */
+}
+.popover-arrow,
+.popover-arrow::before {
+	position: absolute;
+	width: calc(var(--arrow-size) * 2);
+	height: calc(var(--arrow-size) * 2);
+	background: inherit;
+	border: inherit;
+	box-sizing: border-box;
+	/* can't use z-index here, so have to use clip-path below, for a continuous border */
+}
+.popover-arrow {
+	visibility: hidden;
+}
+.popover-arrow::before {
+	visibility: visible;
+	content: '';
+	transform: rotate(45deg);
+}
+/* -100%'s are because the inner shape (.popover-arrow::before) is rotated,
+so it extends beyond the box of .popover-arrow;
+we don't need sqrt(2) or whatever for the diagonal, just an upper bound so it doesn't clip the corners. */
+.popover[data-popper-placement^='top'] > .popover-arrow {
+	bottom: calc(-1 * var(--arrow-size));
+	clip-path: inset(var(--arrow-size) -100% -100% -100%);
+}
+.popover[data-popper-placement^='bottom'] > .popover-arrow {
+	top: calc(-1 * var(--arrow-size));
+	clip-path: inset(-100% -100% var(--arrow-size) -100%);
+}
+.popover[data-popper-placement^='left'] > .popover-arrow {
+	right: calc(-1 * var(--arrow-size));
+	clip-path: inset(var(--arrow-size) -100% -100% -100%);
+}
+.popover[data-popper-placement^='right'] > .popover-arrow {
+	left: calc(-1 * var(--arrow-size));
+	clip-path: inset(-100% -100% var(--arrow-size) -100%);
+}
+
+
+
+.error-message {
+	background: maroon;
+	color: white;
+	padding: 1em;
+}
+.error-message pre {
+	margin: 0;
+	margin-top: 1em;
+}
+
+fieldset.labeled-radio-buttons {
+	margin: 0;
+	padding: 0;
+	border: 0;
+}
+fieldset.labeled-radio-buttons > legend {
+	margin: 0;
+	padding: 0;
+	float: left;
+	font: inherit;
+}
+.labeled-radio-buttons label {
+	display: inline-block;
+}
+
+fieldset.ui-section {
+	border: 2px solid gray;
+	border-radius: 8px;
+	background: rgba(30, 30, 30, 0.5);
+	padding: 1em;
+	/* padding-bottom: calc(1em + 1.3em / 2); - to balance with the top which has the <legend>, mathematically */
+	padding-bottom: 1.5em; /* to balance with the top which has the <legend> */
+}
+fieldset.ui-section > legend {
+	background-color: #1a1a1a;
+	color: #aaa;
+	padding: 3px 6px;
+	border-radius: 2px;
+	font-size: 1.3em;
+}
+fieldset.ui-section:not(:first-of-type) {
+	margin-top: 1.3em;
+}
+.control-row {
+	line-height: 2em;
+}
+.control-row:not(:first-of-type) {
+	margin-top: 0.5em;
+}
+
+#midi-exporting-clearing-controls {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+}
+@media (max-width: 600px) {
+	/* allow the controls to wrap, so that the whole UI can shrink */
+	#midi-exporting-clearing-controls {
+		flex-wrap: wrap;
+	}
+}
+#clear-button,
+#undo-clear-button {
+	margin-left: auto;
+}
+
+ul.bullets-in-items {
+	list-style-type: none;
+	padding: 0;
+}
+li {
+	padding: 2px 0;
+}
+.supported {
+	color: lime;
+}
+.bulleted-list {
+	color: #dedede;
+	padding-left: 1.1em;
+}
+
+.button-functional {
+	border: none;
+	background: none;
+	padding: 0;
+}
+/* Note: don't make a [hidden] { display: none !important; } rule as it will break the aria.modal library */
+.button-functional,
+.button-visual,
+#demo-button-stop-text:not([hidden]),
+#demo-button-start-text:not([hidden]) {
+	vertical-align: middle;
+	display: inline-flex; /* NOTE: overrides display: none implicit style from "hidden" attribute*/
+	justify-content: center;
+	align-items: center;
+}
+.button-functional[hidden] {
+	visibility: hidden;
+}
+#clear-button[hidden],
+#undo-clear-button[hidden] {
+	display: none;
+}
+
+.button-visual {
+	pointer-events: none; /* needed for ARIAModal library to show dialog */
+	line-height: 0.8;
+	height: 1.5em;
+	width: 10em;
+	font-size: 14px;
+	font-weight: bold;
+	background-color: #434343;
+	background-image: linear-gradient(100% 100% 90deg, #515151, #7A7A7A);
+	border: none;
+	border-radius: 4px;
+	box-shadow: inset 0 1px 2px rgba(255,255,255,0.2), 0 1px 0 #2D2D2D, 0 2px 0 #2D2D2D, 0 3px 0 #2C2C2C, 0 4px 0 #2A2A2A, 0 0 0 2px black, 0 4px 0 2px black, 0 0 0 3px #222, 0 4px 0 3px #222;
+	padding: 9px 16px;
+	margin-bottom: 3px;
+	color: #ddd;
+}
+
+.button-functional:disabled .button-visual {
+	color: #555;
+	background: #222;
+	box-shadow: inset 0 1px 2px rgba(255,255,255,0.05), 0 4px 0 #111, 0 0 0 2px black, 0 4px 0 2px black, 0 0 0 3px #222, 0 4px 0 3px #222;
+}
+
+.button-functional:enabled:hover .button-visual { color: white }
+
+.button-functional:enabled:active .button-visual {
+	margin-top: 3px;
+	margin-bottom: 0px;
+	box-shadow: inset 0 1px 2px rgba(255,255,255,0.2), 0 1px 0 #2A2A2A, 0 1px 0 2px black, 0 1px 0 3px #222;
+} 
+
+.button-functional {
+	outline: none;
+}
+.button-functional:focus .button-visual {
+	outline: 2px auto #2b8ce2;
+	outline: 2px auto -webkit-focus-ring-color;
+}
+
+.button-visual span[aria-hidden],
+.button-visual:not(.popover-button) svg {
+	margin-right: 5px;
+}
+.button-visual svg {
+	height: 1.5em;
+	width: 1.5em;
+	flex: 0 0 auto;
+}
+#setup-3d-button svg {
+	height: 1.5em;
+	width: calc(1.5em * 1.5);
+}
+#learn-range-or-apply-button svg {
+	height: 1.5em;
+	width: 3em;
+}
+#fullscreen-button svg,
+#demo-button svg {
+	height: 1em;
+	width: 1em;
+}
+#github-button svg {
+	height: 1.3em;
+	width: 1.3em;
+}
+#undo-clear-button svg {
+	height: 1.3em;
+	width: 1.3em;
+}
+.fill-cc {
+	fill: currentColor;
+}
+button:disabled .fill-cc-if-disabled {
+	fill: currentColor;
+}
+
+#no-notes-recorded-message,
+#loading-midi-devices-message,
+#no-midi-devices-message {
+	color: gray;
+}
+
+#name-or-message {
+	/* for space against the Clear button, and a consistent size between these two UI states */
+	min-width: 220px;
+}
+
+#recording-name-input {
+	margin-left: 7px;
+	width: auto;
+}
+
+.show-recovery-button {
+	float: right;
+}
+
+#recoverables {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+.recoverable-recording {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+}
+.recoverable-recording-name {
+	margin-left: 10px;
+	margin-right: auto;
+}
+
+input[type="text"],
+input[type="number"] {
+	background: #111;
+	color: white;
+	padding: 4px;
+	width: calc(4ch + 20px);
+	border: 1px solid #5f5f5f;
+	border-radius: 2px;
+}
+input[type="text"]:disabled,
+input[type="number"]:disabled {
+	color: #555;
+	background: #111;
+	border-color: #333;
+}
+input[type="text"]:invalid,
+input[type="number"]:invalid {
+	background: #e83636;
+	color: white;
+}
+
+input[type="checkbox"]:disabled,
+input[type="radio"]:disabled {
+	opacity: 0.3;
+}
+
+.disabled {
+	color: rgba(128, 128, 128, 0.7);
+}
+.disabled svg,
+:disabled svg {
+	opacity: 0.5;
+}
+.disabled select {
+	opacity: 0.3;
+}
+
+a {
+	color: #00ceff;
+}
+
+.visually-hidden {
+	position: absolute;
+	left: -10000px;
+	top: auto;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+}
+
+.a11y-modal {
+	background: #111;
+	color: white;
+	/* Ensures modal's close button is accessible when viewport is narrow */
+	box-sizing: border-box;
+}
+
+.is-icon-btn:hover [data-modal-x],
+.is-icon-btn:focus [data-modal-x] {
+	color: white;
+}
+
+/* Settings modal should be allowed to be a little bigger than a11y-modal's default,
+so that the Learn Range and (usually invisible) Cancel button can fit on one row with the label and inputs. */
+#settings-modal-content {
+	max-width: 700px;
+}
+
+/* Align info dialog's heading with logo icon */
+@media (min-width: 520px) {
+	/* App name and tagline both beside icon */
+	#info-modal-content h1,
+	#info-modal-content h2 {
+		margin: 0;
+	}
+}
+@media (max-width: 519px) {
+	/* Tagline on a separate row */
+	#info-modal-content h2 {
+		clear: both;
+	}
+}
+@media (max-width: 519px) and (min-width: 360px) {
+	/* App name not wrapped; center it vertically with the icon */
+	/* This is an inexact approach, using media queries, as it depends on the font, so there's an edge case or two where it won't look as nice. */
+	#info-modal-content h1 {
+		/* using rem to match img size style defined in HTML, given that the h1 has a different em scale */
+		line-height: 4rem;
+	}
+}
+@media (max-width: 270px) {
+	/* App name on a separate row */
+	#info-modal-content h1 {
+		clear: both;
+	}
+}
+
+
+/* animation taken from https://projects.lukehaas.me/css-loaders/ */
+.loading-indicator {
+	color: #ffffff;
+	font-size: 20px;
+	margin: 100px auto;
+	width: 1em;
+	height: 1em;
+	border-radius: 50%;
+	position: relative;
+	text-indent: -9999em;
+	-webkit-animation: load4 1.3s infinite linear;
+	animation: load4 1.3s infinite linear;
+	-webkit-transform: translateZ(0) scale(0.2);
+	-ms-transform: translateZ(0) scale(0.2);
+	transform: translateZ(0) scale(0.2);
+}
+@-webkit-keyframes load4 {
+	0%,
+	100% {
+		box-shadow: 0 -3em 0 0.2em, 2em -2em 0 0em, 3em 0 0 -1em, 2em 2em 0 -1em, 0 3em 0 -1em, -2em 2em 0 -1em, -3em 0 0 -1em, -2em -2em 0 0;
+	}
+	12.5% {
+		box-shadow: 0 -3em 0 0, 2em -2em 0 0.2em, 3em 0 0 0, 2em 2em 0 -1em, 0 3em 0 -1em, -2em 2em 0 -1em, -3em 0 0 -1em, -2em -2em 0 -1em;
+	}
+	25% {
+		box-shadow: 0 -3em 0 -0.5em, 2em -2em 0 0, 3em 0 0 0.2em, 2em 2em 0 0, 0 3em 0 -1em, -2em 2em 0 -1em, -3em 0 0 -1em, -2em -2em 0 -1em;
+	}
+	37.5% {
+		box-shadow: 0 -3em 0 -1em, 2em -2em 0 -1em, 3em 0em 0 0, 2em 2em 0 0.2em, 0 3em 0 0em, -2em 2em 0 -1em, -3em 0em 0 -1em, -2em -2em 0 -1em;
+	}
+	50% {
+		box-shadow: 0 -3em 0 -1em, 2em -2em 0 -1em, 3em 0 0 -1em, 2em 2em 0 0em, 0 3em 0 0.2em, -2em 2em 0 0, -3em 0em 0 -1em, -2em -2em 0 -1em;
+	}
+	62.5% {
+		box-shadow: 0 -3em 0 -1em, 2em -2em 0 -1em, 3em 0 0 -1em, 2em 2em 0 -1em, 0 3em 0 0, -2em 2em 0 0.2em, -3em 0 0 0, -2em -2em 0 -1em;
+	}
+	75% {
+		box-shadow: 0em -3em 0 -1em, 2em -2em 0 -1em, 3em 0em 0 -1em, 2em 2em 0 -1em, 0 3em 0 -1em, -2em 2em 0 0, -3em 0em 0 0.2em, -2em -2em 0 0;
+	}
+	87.5% {
+		box-shadow: 0em -3em 0 0, 2em -2em 0 -1em, 3em 0 0 -1em, 2em 2em 0 -1em, 0 3em 0 -1em, -2em 2em 0 0, -3em 0em 0 0, -2em -2em 0 0.2em;
+	}
+}
+@keyframes load4 {
+	0%,
+	100% {
+		box-shadow: 0 -3em 0 0.2em, 2em -2em 0 0em, 3em 0 0 -1em, 2em 2em 0 -1em, 0 3em 0 -1em, -2em 2em 0 -1em, -3em 0 0 -1em, -2em -2em 0 0;
+	}
+	12.5% {
+		box-shadow: 0 -3em 0 0, 2em -2em 0 0.2em, 3em 0 0 0, 2em 2em 0 -1em, 0 3em 0 -1em, -2em 2em 0 -1em, -3em 0 0 -1em, -2em -2em 0 -1em;
+	}
+	25% {
+		box-shadow: 0 -3em 0 -0.5em, 2em -2em 0 0, 3em 0 0 0.2em, 2em 2em 0 0, 0 3em 0 -1em, -2em 2em 0 -1em, -3em 0 0 -1em, -2em -2em 0 -1em;
+	}
+	37.5% {
+		box-shadow: 0 -3em 0 -1em, 2em -2em 0 -1em, 3em 0em 0 0, 2em 2em 0 0.2em, 0 3em 0 0em, -2em 2em 0 -1em, -3em 0em 0 -1em, -2em -2em 0 -1em;
+	}
+	50% {
+		box-shadow: 0 -3em 0 -1em, 2em -2em 0 -1em, 3em 0 0 -1em, 2em 2em 0 0em, 0 3em 0 0.2em, -2em 2em 0 0, -3em 0em 0 -1em, -2em -2em 0 -1em;
+	}
+	62.5% {
+		box-shadow: 0 -3em 0 -1em, 2em -2em 0 -1em, 3em 0 0 -1em, 2em 2em 0 -1em, 0 3em 0 0, -2em 2em 0 0.2em, -3em 0 0 0, -2em -2em 0 -1em;
+	}
+	75% {
+		box-shadow: 0em -3em 0 -1em, 2em -2em 0 -1em, 3em 0em 0 -1em, 2em 2em 0 -1em, 0 3em 0 -1em, -2em 2em 0 0, -3em 0em 0 0.2em, -2em -2em 0 0;
+	}
+	87.5% {
+		box-shadow: 0em -3em 0 0, 2em -2em 0 -1em, 3em 0 0 -1em, 2em 2em 0 -1em, 0 3em 0 -1em, -2em 2em 0 0, -3em 0em 0 0, -2em -2em 0 0.2em;
+	}
+}
+
+
+#perspective-registration-container,
+#perspective-registration-svg,
+#perspective-registration-video {
+	width: 100%;
+}
+#perspective-registration-svg,
+#perspective-registration-video {
+	position: absolute;
+	left: 0;
+	top: 0;
+}
+#perspective-registration-video {
+	z-index: -5;
+}
+#perspective-registration-svg {
+	display: block;
+	margin: auto;
+	touch-action: none;
+	pointer-events: none;
+	z-index: 5;
+}
+.point-handle {
+	pointer-events: all;
+}
+
+#element-to-transform {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 150px;
+	height: 120px;
+	border: 4px solid red;
+	transform-origin: 0 0;
+	pointer-events: none;
+	color: white;
+	background: rgba(0, 0, 0, 0.2);
+}
+
