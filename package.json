@@ -1,8 +1,8 @@
 {
-	"name": "midi-recorder",
+	"name": "JazzJam",
 	"description": "The easiest way to record MIDI.",
 	"homepage": "https://midi-recorder.web.app",
-	"author": "Isaiah Odhner <isaiahodhner@gmail.com>",
+	"author": "Philip Pincencia <philip.m.pincencia@gmail.com>",
 	"scripts": {
 		"start": "run-p live-server coffee",
 		"live-server": "live-server public/",
