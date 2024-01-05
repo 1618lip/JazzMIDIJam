@@ -1,7 +1,7 @@
 {
-    "name": "MIDI Recorder",
-    "short_name": "MIDI Recorder",
-    "description": "The easiest way to record MIDI.",
+    "name": "JazzMIDIJam",
+    "short_name": "JazzMIDIJam",
+    "description": "Jam to your favorite standards and record your MIDI",
     "icons": [
         {
             "src": "/android-chrome-192x192.png",
