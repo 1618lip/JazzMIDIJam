@@ -1055,7 +1055,7 @@ export_midi_file = (delete_later_reason, file_name)->
 	events.sort((a, b)-> a._time - b._time)
 	total_track_time_ms = events[events.length - 1]._time - events[0]._time
 	total_track_time_ms += 1000 # extra time for notes to ring out
-	BPM = 120 # beats per minute
+	BPM = window.bpm # beats per minute
 	PPQN = 192 # pulses per quarter note
 	pulses_per_ms = PPQN * BPM / 60000
 	total_track_time_seconds = total_track_time_ms / 1000
@@ -1157,14 +1157,6 @@ export_midi_file = (delete_later_reason, file_name)->
 ##############################
 # User Interface
 ##############################
-
-fullscreen_button.onclick = ->
-	if fullscreen_target_el.requestFullscreen
-		fullscreen_target_el.requestFullscreen()
-	else if fullscreen_target_el.mozRequestFullScreen
-		fullscreen_target_el.mozRequestFullScreen()
-	else if fullscreen_target_el.webkitRequestFullScreen
-		fullscreen_target_el.webkitRequestFullScreen()
 
 
 arrow_size = 10
