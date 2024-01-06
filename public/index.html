@@ -77,7 +77,8 @@
 							<a href="https://github.com/1618lip/JazzMIDIJam/raw/main/BackingTracks/Confirmation.mp3"> Download audio </a>
 						</audio>
 					</figure>
-					
+					<button id="startRecordingButton" onclick="startRecording()">Start Recording</button>
+					<div id="countdown"></div>
 				</div>
 				<div class="panel" id="donnalee" onclick="setBPM(185)">
 					<figure>
@@ -86,7 +87,8 @@
 							<a href="https://github.com/1618lip/JazzMIDIJam/raw/main/BackingTracks/Donna_Lee.mp3"> Download audio </a>
 						</audio>
 					</figure>
-					
+					<button id="startRecordingButton" onclick="startRecording()">Start Recording</button>
+					<div id="countdown"></div>
 				</div>
 				<div class="panel" id="giantsteps" onclick="setBPM(200)">
 					<figure>
@@ -95,7 +97,8 @@
 							<a href="https://github.com/1618lip/JazzMIDIJam/raw/main/BackingTracks/Giant_Steps.mp3"> Download audio </a>
 						</audio>
 					</figure>
-					
+					<button id="startRecordingButton" onclick="startRecording()">Start Recording</button>
+					<div id="countdown"></div>
 				</div>
 				<div class="panel" id="justfriends" onclick="setBPM(190)">
 					<figure>
@@ -104,7 +107,8 @@
 							<a href="https://github.com/1618lip/JazzMIDIJam/raw/main/BackingTracks/Just_Friends.mp3"> Download audio </a>
 						</audio>
 					</figure>
-					
+					<button id="startRecordingButton" onclick="startRecording()">Start Recording</button>
+					<div id="countdown"></div>
 				</div>
 			</div>
 		</div>
@@ -194,7 +198,7 @@
 		// Common code to be added to each panel
 		function addCommonCodeToPanel(panelId, bpm) {
         	var panel = document.getElementById(panelId);
-
+			
 			// Create a main element
 			var mainElement = document.createElement("main");
 			mainElement.className = "app-main";
@@ -318,12 +322,14 @@
     }
 
     // Call addCommonCodeToPanel for each panel with the corresponding BPM
-    addCommonCodeToPanel("afoggyday", 130);
-    addCommonCodeToPanel("bluebossa", 130);
-	addCommonCodeToPanel("confirmation", 205);
+	
+    //addCommonCodeToPanel("afoggyday", 130);
+    //addCommonCodeToPanel("bluebossa", 130);
+	//addCommonCodeToPanel("confirmation", 205);
 	addCommonCodeToPanel("donnalee", 185);
-	addCommonCodeToPanel("giantsteps", 200);
-	addCommonCodeToPanel("justfriends", 190);
+	//addCommonCodeToPanel("giantsteps", 200);
+	//addCommonCodeToPanel("justfriends", 190);
+	
     // Repeat for other panels
 	</script>
 	<script src="lib/FileSaver.js"></script>
