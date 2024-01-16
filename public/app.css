@@ -4,11 +4,11 @@ body {
 	padding: 0;
 	margin: 0;
 	background: whitesmoke;
-	color: white;
+	background-color: white;
 	width: 100%;
 	height: 100%;
 	margin: 0;
-	overflow: hidden;
+	overflow: auto;
 }
 #countdown {
 	display: none;
@@ -17,7 +17,7 @@ body {
 }
 .jumbotron, 
 .right {
-	background-color: rgba(213, 164, 87, 0.7);
+	background-color: white;
 }
   * {
     box-sizing: border-box;
@@ -659,3 +659,69 @@ so that the Learn Range and (usually invisible) Cancel button can fit on one row
 	background: rgba(0, 0, 0, 0.2);
 }
 
+@import url('https://fonts.googleapis.com/css2?family=Russo+One&display=swap');
+.kb {
+  block-size: var(--_bs, 8em);
+  display: grid;
+  grid-column-gap: 1px;
+  grid-template-columns: repeat(var(--_r, 156), 1fr);
+  grid-template-rows: repeat(5, 1fr);
+}
+.kb [aria-label] {
+  --_focus-bxsh: inset 0 0 50px #fff, inset 20px 0 80px hsl(var(--_h,0), 70%, 35%), inset -20px 0 80px hsl(var(--_h,0), 100%, 50%);
+  --_hover-bg: linear-gradient(to bottom, #FFF 0%, hsl(0, 0%, 90%) 100%);
+  background-color: var(--_bgc, #FFF);
+  border: 0;
+  border-radius: 0 0 3px 3px;
+  grid-column: var(--gcs) / span var(--_csp, 3);
+  grid-row: 1 / span var(--_rsp, 5);
+  position: relative;
+}
+.kb [aria-label*="#"] { 
+  --_csp: 2;
+  --_focus-bxsh: inset 0 0 50px hsl(var(--_h,0), 25%, 35%), inset 20px 0 80px hsl(var(--_h,0), 70%, 35%), inset -20px 0 80px hsl(var(--_h,0), 100%, 50%);
+  --_hover-bg: linear-gradient(to top, #000 0%, hsl(0, 0%, 25%) 100%);
+  --_rsp: 3;
+  background-color: var(--_bgcs, #000);
+  z-index: 1;
+}
+.kb [aria-label]:not(.keydown):hover { background: var(--_hover-bg); }
+.kb [aria-label]:not(.keydown):focus-visible { box-shadow: var(--_focus-bxsh); outline: none; }
+.synth {
+  background: var(--synth-bgc, linear-gradient(215deg, hsl(0, 0%, 25%), hsl(0, 0%, 15%), hsl(0, 0%, 5%)));
+  border-radius: .33em .33em .75em .75em;
+  color: var(--synth-c, #FFF);
+  font-family: var(--synth-ff, 'Russo One', sans-serif);
+  inline-size: max-content;
+  padding: .5em 1em 1em 1em;
+}
+.synth h2 {
+  font-size: var(--synth-h-fz, 1.33em);
+  font-weight: var(--synth-h-fw, 700);
+  margin: 0 0 .5em 0;
+}
+
+/* modifiers */
+.kb--61 { --_r: 108; }
+.kb--49 { --_r: 87; }
+.kb--32 { --_bs: 6em; --_r: 57;}
+.kb--25 { --_bs: 6em; --_r: 45; }
+
+.keydown {
+  --_l: calc((var(--v, 1) * 0.394%));
+  --_bgc: hsla(var(--_h), 50%, calc(95% - var(--_l)));
+  --_bgcs: var(--_bgc);
+}
+.keydown::after {
+  background-color: #000;
+  block-size: .5em;
+  border-radius: 50%;;
+  content: "";
+  display: block;
+  inline-size: .5em;
+  inset-block-end: 1em;
+  inset-inline-start: 50%;
+  position: absolute;
+  transform: translateX(-50%);
+}
+small { font-family: ui-sans-serif, system-ui, sans-serif; }

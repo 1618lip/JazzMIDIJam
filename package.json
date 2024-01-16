@@ -1,5 +1,5 @@
 {
-  "name": "JazzJam",
+  "name": "jazzjam",
   "description": "The easiest way to record MIDI.",
   "homepage": "https://midi-recorder.web.app",
   "author": "Philip Pincencia <philip.m.pincencia@gmail.com>",
@@ -19,5 +19,9 @@
   },
   "devDependencies": {
     "nodemon": "^3.0.2"
-  }
+  },
+  "version": "1.0.0",
+  "main": "index.js",
+  "keywords": [],
+  "license": "ISC"
 }

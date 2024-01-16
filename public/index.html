@@ -23,93 +23,260 @@
 
 <body>
 	<div class="container-fluid">
-		<div class="jumbotron">
-			<h1><b>JazzMIDIJam</b></h1>
-			<h4><b><i>Chrome recommended</i></b></h4>
-			<h5>Current issue: </h5>
-			<ul>
-			<li>Fix color</li>
-			<li>Sync backing track with start of recording</li>
-			<li>Add sound when recording</li>
-			</ul>
-		</div>
 		<div class="row">
 			<div class="left" style="background-color: rgba(213, 164, 87, 0.7);">
-			<h2>Menu</h2>
-			<input type="text" id="mySearch" onkeyup="filterSearch()" placeholder="Search Jazz Standard" title="Type in a category">
-			<ul id="myMenu">
-				<div class="tab">
-				<li><a class="tabs" data-id="afoggyday">A Foggy Day</a></li>
-				<li><a class="tabs" data-id="bluebossa">Blue Bossa</a></li>
-				<li><a class="tabs" data-id="confirmation">Confirmation</a></li>
-				<li><a class="tabs" data-id="donnalee">Donna Lee</a></li>
-				<li><a class="tabs" data-id="giantsteps">Giant Steps</a></li>
-				<li><a class="tabs" data-id="justfriends">Just Friends</a></li>
+				<div class="jumbotron" style="background-color: gray;">
+					<h1><b>JazzMIDIJam</b></h1>
+					<h4><b><i>Chrome recommended</i></b></h4>
+					<h5>Current issue: </h5>
+					<ul>
+					<li>Fix color</li>
+					<li>Sync backing track with start of recording</li>
+					<li>Add sound when recording</li>
+					</ul>
 				</div>
-			</ul>
 			</div>
-			
+			<div class="right" style="background-color: rgba(213, 164, 87, 0.7);">
+				<h2>Menu</h2>
+				<input type="text" id="mySearch" onkeyup="filterSearch()" placeholder="Search Jazz Standard" title="Type in a category">
+				<ul id="myMenu">
+					<div class="tab">
+					<li><a class="tabs" data-id="afoggyday">A Foggy Day</a></li>
+					<li><a class="tabs" data-id="bluebossa">Blue Bossa</a></li>
+					<li><a class="tabs" data-id="confirmation">Confirmation</a></li>
+					<li><a class="tabs" data-id="donnalee">Donna Lee</a></li>
+					<li><a class="tabs" data-id="giantsteps">Giant Steps</a></li>
+					<li><a class="tabs" data-id="justfriends">Just Friends</a></li>
+					</div>
+				</ul>
+			</div>
+		</div>
+		<div class="panel" id="afoggyday" onclick="setBPM(130)">
+			<figure>
+				<figcaption>Listen for a bit:</figcaption>
+				<audio controls id="audioPlayer" src="https://github.com/1618lip/BackingTracks/raw/main/BackingTracks/A_Foggy_Day.mp3">
+					<a href="https://github.com/1618lip/BackingTracks/raw/main/BackingTracks/A_Foggy_Day.mp3"> Download audio </a>
+				</audio>
+			</figure>
+			<button id="startRecordingButton" onclick="startRecording()">Start Recording</button>
+			<div id="countdown"></div>
+		</div>
+		<div class="panel" id="bluebossa" onclick="setBPM(130)">
+			<figure>
+				<figcaption>Listen for a bit:</figcaption>
+				<audio controls src="https://github.com/1618lip/BackingTracks/raw/main/BackingTracks/Blue_Bossa.mp3">
+					<a href="https://github.com/1618lip/BackingTracks/raw/main/BackingTracks/Blue_Bossa.mp3"> Download audio </a>
+				</audio>
+			</figure>
+			<button id="startRecordingButton" onclick="startRecording()">Start Recording</button>
+			<div id="countdown"></div>
+		</div>
+		<div class="panel" id="confirmation" onclick="setBPM(205)">
+			<figure>
+				<figcaption>Listen for a bit:</figcaption>
+				<audio controls src="https://github.com/1618lip/BackingTracks/raw/main/BackingTracks/Confirmation.mp3">
+					<a href="https://github.com/1618lip/BackingTracks/raw/main/BackingTracks/Confirmation.mp3"> Download audio </a>
+				</audio>
+			</figure>
+			<button id="startRecordingButton" onclick="startRecording()">Start Recording</button>
+			<div id="countdown"></div>
+		</div>
+		<div class="panel" id="donnalee" onclick="setBPM(185)">
+			<figure>
+				<figcaption>Listen for a bit:</figcaption>
+				<audio controls src="https://github.com/1618lip/BackingTracks/raw/main/BackingTracks/Donna_Lee.mp3">
+					<a href="https://github.com/1618lip/BackingTracks/raw/main/BackingTracks/Donna_Lee.mp3"> Download audio </a>
+				</audio>
+			</figure>
+			<button id="startRecordingButton" onclick="startRecording()">Start Recording</button>
+			<div id="countdown"></div>
+		</div>
+		<div class="panel" id="giantsteps" onclick="setBPM(200)">
+			<figure>
+				<figcaption>Listen for a bit:</figcaption>
+				<audio controls src="https://github.com/1618lip/BackingTracks/raw/main/BackingTracks/Giant_Steps.mp3">
+					<a href="https://github.com/1618lip/BackingTracks/raw/main/BackingTracks/Giant_Steps.mp3"> Download audio </a>
+				</audio>
+			</figure>
+			<button id="startRecordingButton" onclick="startRecording()">Start Recording</button>
+			<div id="countdown"></div>
+		</div>
+		<div class="panel" id="justfriends" onclick="setBPM(190)">
+			<figure>
+				<figcaption>Listen for a bit:</figcaption>
+				<audio controls src="https://github.com/1618lip/BackingTracks/raw/main/BackingTracks/Just_Friends.mp3">
+					<a href="https://github.com/1618lip/BackingTracks/raw/main/BackingTracks/Just_Friends.mp3"> Download audio </a>
+				</audio>
+			</figure>
+			<button id="startRecordingButton" onclick="startRecording()">Start Recording</button>
+			<div id="countdown"></div>
+		</div>
+		<div class="row">
+			<div class="left">
+				<main class="app-main">
+				<noscript>
+					This app requires JavaScript.
+				</noscript>
+				<div id="controls">
+					<span class="visually-hidden">.</span> <!-- for screen readers, or at least ChromeVox -->
+					<fieldset class="ui-section">
+						<legend>Input</legend>
+						<span class="visually-hidden">.</span> <!-- for screen readers, or at least ChromeVox -->
+						<h3>MIDI devices:</h3>
+						<div id="midi-devices-area">
+							<p id="loading-midi-devices-message" hidden>Loading...</p>
+							<p id="no-midi-devices-message" hidden>No MIDI devices detected</p>
+							<table id="midi-devices" aria-live="assertive"></table>
+							<div id="midi-not-supported" hidden>
+								<div class="error-message">
+									This browser doesn't support MIDI access.
+									Try using Chrome, or for other browsers, the
+									<a href="https://jazz-soft.net/download/web-midi/">Jazz-Soft Web MIDI API extension</a>.
+								</div>
+								<button class="button-functional" id="demo-button">
+									<span class="button-visual">
+										<span id="demo-button-stop-text" hidden>
+											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" height="1em">
+												<polygon points="0,0 0,100 100,100 100,0" fill="#FFF" class="fill-cc"/>
+											</svg>
+											Stop Demo
+										</span>
+										<span id="demo-button-start-text">
+											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" height="1em">
+												<polygon points="0,0 0,100 100,50" fill="#FFF" class="fill-cc"/>
+											</svg>
+											Demo
+										</span>
+									</span>
+								</button>
+							</div>
+							<div id="midi-access-failed" class="error-message" hidden>
+								Failed to get MIDI access.
+								<pre id="midi-access-failed-pre"></pre>
+							</div>
+						</div>
+						<button id="troubleshoot-midi-input-button" class="popover-button" aria-haspopup="dialog" aria-expanded="false">
+							<svg fill="currentColor" height="1em" viewBox="0 0 40 40" style="vertical-align: bottom;">
+								<path
+									d="m18.4 15v-3.4h3.2v3.4h-3.2z m1.6 18.4c7.3 0 13.4-6.1 13.4-13.4s-6.1-13.4-13.4-13.4-13.4 6.1-13.4 13.4 6.1 13.4 13.4 13.4z m0-30c9.2 0 16.6 7.4 16.6 16.6s-7.4 16.6-16.6 16.6-16.6-7.4-16.6-16.6 7.4-16.6 16.6-16.6z m-1.6 25v-10h3.2v10h-3.2z">
+								</path>
+							</svg>
+							<u>MIDI device not showing up?</u>
+						</button>
+						<div id="troubleshoot-midi-input-popover" class="popover" hidden>
+							<ul class="bulleted-list">
+								<li>Make sure it's plugged into your computer and turned on.</li>
+								<li>Try <a href="JavaScript:location.reload();">refreshing the page</a>.</li>
+								<li>If that doesn't work, try unplugging it and plugging it back in.</li>
+								<li>Try restarting your computer.</li>
+							</ul>
+							<div class="popover-arrow" data-popper-arrow></div>
+						</div>
+					</fieldset>
+					<fieldset id="midi-exporting" class="ui-section">
+						<legend>Export</legend>
+						<div id="midi-exporting-clearing-controls">
+							<button class="button-functional" id="export-midi-file-button" disabled aria-keyshortcuts="Ctrl+S Meta+S">
+								<span class="button-visual">
+									Save MIDI File
+								</span>
+							</button>
+							<span id="name-or-message">
+								<span id="no-notes-recorded-message" tabindex="0">&nbsp;- No notes recorded</span>
+								<input type="text" id="recording-name-input" hidden/>
+							</span>
+							<span style="flex: 1"></span>
+							<button class="button-functional" id="clear-button" disabled>
+								<span class="button-visual">
+									Clear
+								</span>
+							</button>
+							<button class="button-functional" id="undo-clear-button" hidden>
+								<span class="button-visual">
+									Undo Clear
+								</span>
+							</button>
+						</div>
+						<br>
+						<div class="error-message" hidden id="recovery-error-message"></div>
+						<!-- Modal libraries like to replace your buttons' id attributes apparently... -->
+						<!-- Also there's no equivalent data-modal-hidden to make it not unhide the button if it's hidden -->
+						<button class="button-functional show-recovery-button" disabled data-modal-disabled data-modal-open="recovery-modal-content">
+							<span class="button-visual">
+								<span class="loading-indicator"></span>
+								Recover Recordings
+							</span>
+						</button>
+						<div id="recovery-modal-content" hidden data-modal>
+							<div data-modal-document>
+								<h3>Recover Recordings</h3>
+								<ul id="recoverables"></ul>
+								<p id="recovery-empty-message" hidden>
+									No more recordings to recover.
+								</p>
+							</div>
+						</div>
+
+					</fieldset>
+				
+					<div id="fullscreen-target">
+						<canvas id="midi-viz-canvas" class="element-to-transform"></canvas>
+					</div>
+				</div>
+				</main>
+			</div>
 			<div class="right">
-				<div class="panel" id="afoggyday" onclick="setBPM(130)">
-					<figure>
-						<figcaption>Listen for a bit:</figcaption>
-						<audio controls id="audioPlayer" src="https://github.com/1618lip/BackingTracks/raw/main/BackingTracks/A_Foggy_Day.mp3">
-							<a href="https://github.com/1618lip/BackingTracks/raw/main/BackingTracks/A_Foggy_Day.mp3"> Download audio </a>
-						</audio>
-					</figure>
-					<button id="startRecordingButton" onclick="startRecording()">Start Recording</button>
-					<div id="countdown"></div>
-				</div>
-				<div class="panel" id="bluebossa" onclick="setBPM(130)">
-					<figure>
-						<figcaption>Listen for a bit:</figcaption>
-						<audio controls src="https://github.com/1618lip/BackingTracks/raw/main/BackingTracks/Blue_Bossa.mp3">
-							<a href="https://github.com/1618lip/BackingTracks/raw/main/BackingTracks/Blue_Bossa.mp3"> Download audio </a>
-						</audio>
-					</figure>
-					<button id="startRecordingButton" onclick="startRecording()">Start Recording</button>
-					<div id="countdown"></div>
-				</div>
-				<div class="panel" id="confirmation" onclick="setBPM(205)">
-					<figure>
-						<figcaption>Listen for a bit:</figcaption>
-						<audio controls src="https://github.com/1618lip/BackingTracks/raw/main/BackingTracks/Confirmation.mp3">
-							<a href="https://github.com/1618lip/BackingTracks/raw/main/BackingTracks/Confirmation.mp3"> Download audio </a>
-						</audio>
-					</figure>
-					<button id="startRecordingButton" onclick="startRecording()">Start Recording</button>
-					<div id="countdown"></div>
-				</div>
-				<div class="panel" id="donnalee" onclick="setBPM(185)">
-					<figure>
-						<figcaption>Listen for a bit:</figcaption>
-						<audio controls src="https://github.com/1618lip/BackingTracks/raw/main/BackingTracks/Donna_Lee.mp3">
-							<a href="https://github.com/1618lip/BackingTracks/raw/main/BackingTracks/Donna_Lee.mp3"> Download audio </a>
-						</audio>
-					</figure>
-					<button id="startRecordingButton" onclick="startRecording()">Start Recording</button>
-					<div id="countdown"></div>
-				</div>
-				<div class="panel" id="giantsteps" onclick="setBPM(200)">
-					<figure>
-						<figcaption>Listen for a bit:</figcaption>
-						<audio controls src="https://github.com/1618lip/BackingTracks/raw/main/BackingTracks/Giant_Steps.mp3">
-							<a href="https://github.com/1618lip/BackingTracks/raw/main/BackingTracks/Giant_Steps.mp3"> Download audio </a>
-						</audio>
-					</figure>
-					<button id="startRecordingButton" onclick="startRecording()">Start Recording</button>
-					<div id="countdown"></div>
-				</div>
-				<div class="panel" id="justfriends" onclick="setBPM(190)">
-					<figure>
-						<figcaption>Listen for a bit:</figcaption>
-						<audio controls src="https://github.com/1618lip/BackingTracks/raw/main/BackingTracks/Just_Friends.mp3">
-							<a href="https://github.com/1618lip/BackingTracks/raw/main/BackingTracks/Just_Friends.mp3"> Download audio </a>
-						</audio>
-					</figure>
-					<button id="startRecordingButton" onclick="startRecording()">Start Recording</button>
-					<div id="countdown"></div>
-				</div>
+				<form class="synth" id="midi" style="--synth-bgc: hsl(0, 0%, 0%);--_h:216;">
+					<div id="kb49" class="kb kb--49"><button aria-label="C3" data-freq="130.8127826502993" name="midi_48" "="" style="--gcs:1" type="button>"></button>
+				<button aria-label="C#3" data-freq="138.59131548843604" name="midi_49" "="" style="--gcs:3" type="button>"></button>
+				<button aria-label="D3" data-freq="146.8323839587038" name="midi_50" "="" style="--gcs:4" type="button>"></button>
+				<button aria-label="D#3" data-freq="155.56349186104043" name="midi_51" "="" style="--gcs:6" type="button>"></button>
+				<button aria-label="E3" data-freq="164.81377845643496" name="midi_52" "="" style="--gcs:7" type="button>"></button>
+				<button aria-label="F3" data-freq="174.61411571650194" name="midi_53" "="" style="--gcs:10" type="button>"></button>
+				<button aria-label="F#3" data-freq="184.99721135581723" name="midi_54" "="" style="--gcs:12" type="button>"></button>
+				<button aria-label="G3" data-freq="195.99771799087463" name="midi_55" "="" style="--gcs:13" type="button>"></button>
+				<button aria-label="G#3" data-freq="207.65234878997256" name="midi_56" "="" style="--gcs:15" type="button>"></button>
+				<button aria-label="A3" data-freq="220" name="midi_57" "="" style="--gcs:16" type="button>"></button>
+				<button aria-label="A#3" data-freq="233.08188075904496" name="midi_58" "="" style="--gcs:18" type="button>"></button>
+				<button aria-label="B3" data-freq="246.94165062806206" name="midi_59" "="" style="--gcs:19" type="button>"></button>
+				<button aria-label="C4" data-freq="261.6255653005986" name="midi_60" "="" style="--gcs:22" type="button>"></button>
+				<button aria-label="C#4" data-freq="277.1826309768721" name="midi_61" "="" style="--gcs:24" type="button>"></button>
+				<button aria-label="D4" data-freq="293.6647679174076" name="midi_62" "="" style="--gcs:25" type="button>"></button>
+				<button aria-label="D#4" data-freq="311.12698372208087" name="midi_63" "="" style="--gcs:27" type="button>"></button>
+				<button aria-label="E4" data-freq="329.6275569128699" name="midi_64" "="" style="--gcs:28" type="button>"></button>
+				<button aria-label="F4" data-freq="349.2282314330039" name="midi_65" "="" style="--gcs:31" type="button>"></button>
+				<button aria-label="F#4" data-freq="369.99442271163446" name="midi_66" "="" style="--gcs:33" type="button>"></button>
+				<button aria-label="G4" data-freq="391.99543598174927" name="midi_67" "="" style="--gcs:34" type="button>"></button>
+				<button aria-label="G#4" data-freq="415.3046975799451" name="midi_68" "="" style="--gcs:36" type="button>"></button>
+				<button aria-label="A4" data-freq="440" name="midi_69" "="" style="--gcs:37" type="button>"></button>
+				<button aria-label="A#4" data-freq="466.1637615180899" name="midi_70" "="" style="--gcs:39" type="button>"></button>
+				<button aria-label="B4" data-freq="493.8833012561241" name="midi_71" "="" style="--gcs:40" type="button>"></button>
+				<button aria-label="C5" data-freq="523.2511306011972" name="midi_72" "="" style="--gcs:43" type="button>"></button>
+				<button aria-label="C#5" data-freq="554.3652619537442" name="midi_73" "="" style="--gcs:45" type="button>"></button>
+				<button aria-label="D5" data-freq="587.3295358348151" name="midi_74" "="" style="--gcs:46" type="button>"></button>
+				<button aria-label="D#5" data-freq="622.2539674441618" name="midi_75" "="" style="--gcs:48" type="button>"></button>
+				<button aria-label="E5" data-freq="659.2551138257398" name="midi_76" "="" style="--gcs:49" type="button>"></button>
+				<button aria-label="F5" data-freq="698.4564628660078" name="midi_77" "="" style="--gcs:52" type="button>"></button>
+				<button aria-label="F#5" data-freq="739.9888454232689" name="midi_78" "="" style="--gcs:54" type="button>"></button>
+				<button aria-label="G5" data-freq="783.9908719634986" name="midi_79" "="" style="--gcs:55" type="button>"></button>
+				<button aria-label="G#5" data-freq="830.6093951598903" name="midi_80" "="" style="--gcs:57" type="button>"></button>
+				<button aria-label="A5" data-freq="880" name="midi_81" "="" style="--gcs:58" type="button>"></button>
+				<button aria-label="A#5" data-freq="932.3275230361799" name="midi_82" "="" style="--gcs:60" type="button>"></button>
+				<button aria-label="B5" data-freq="987.7666025122483" name="midi_83" "="" style="--gcs:61" type="button>"></button>
+				<button aria-label="C6" data-freq="1046.5022612023945" name="midi_84" "="" style="--gcs:64" type="button>"></button>
+				<button aria-label="C#6" data-freq="1108.7305239074883" name="midi_85" "="" style="--gcs:66" type="button>"></button>
+				<button aria-label="D6" data-freq="1174.6590716696303" name="midi_86" "="" style="--gcs:67" type="button>"></button>
+				<button aria-label="D#6" data-freq="1244.5079348883235" name="midi_87" "="" style="--gcs:69" type="button>"></button>
+				<button aria-label="E6" data-freq="1318.5102276514797" name="midi_88" "="" style="--gcs:70" type="button>"></button>
+				<button aria-label="F6" data-freq="1396.9129257320155" name="midi_89" "="" style="--gcs:73" type="button>"></button>
+				<button aria-label="F#6" data-freq="1479.9776908465378" name="midi_90" "="" style="--gcs:75" type="button>"></button>
+				<button aria-label="G6" data-freq="1567.981743926997" name="midi_91" "="" style="--gcs:76" type="button>"></button>
+				<button aria-label="G#6" data-freq="1661.2187903197805" name="midi_92" "="" style="--gcs:78" type="button>"></button>
+				<button aria-label="A6" data-freq="1760" name="midi_93" "="" style="--gcs:79" type="button>"></button>
+				<button aria-label="A#6" data-freq="1864.6550460723597" name="midi_94" "="" style="--gcs:81" type="button>"></button>
+				<button aria-label="B6" data-freq="1975.533205024496" name="midi_95" "="" style="--gcs:82" type="button>"></button>
+				<button aria-label="C7" data-freq="2093.004522404789" name="midi_96" "="" style="--gcs:85" type="button>"></button></div>
+				</form>
 			</div>
 		</div>
 	</div>
@@ -195,142 +362,88 @@
 			// You can call the function to handle the BPM input if needed
 			// getBPM();
 		}
-		// Common code to be added to each panel
-		function addCommonCodeToPanel(panelId, bpm) {
-        	var panel = document.getElementById(panelId);
-			
-			// Create a main element
-			var mainElement = document.createElement("main");
-			mainElement.className = "app-main";
-			mainElement.innerHTML = `
-            			<noscript>
-							This app requires JavaScript.
-						</noscript>
-						<div id="controls">
-							<span class="visually-hidden">.</span> <!-- for screen readers, or at least ChromeVox -->
-							<fieldset class="ui-section">
-								<legend>Input</legend>
-								<span class="visually-hidden">.</span> <!-- for screen readers, or at least ChromeVox -->
-								<h3>MIDI devices:</h3>
-								<div id="midi-devices-area">
-									<p id="loading-midi-devices-message" hidden>Loading...</p>
-									<p id="no-midi-devices-message" hidden>No MIDI devices detected</p>
-									<table id="midi-devices" aria-live="assertive"></table>
-									<div id="midi-not-supported" hidden>
-										<div class="error-message">
-											This browser doesn't support MIDI access.
-											Try using Chrome, or for other browsers, the
-											<a href="https://jazz-soft.net/download/web-midi/">Jazz-Soft Web MIDI API extension</a>.
-										</div>
-										<button class="button-functional" id="demo-button">
-											<span class="button-visual">
-												<span id="demo-button-stop-text" hidden>
-													<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" height="1em">
-														<polygon points="0,0 0,100 100,100 100,0" fill="#FFF" class="fill-cc"/>
-													</svg>
-													Stop Demo
-												</span>
-												<span id="demo-button-start-text">
-													<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" height="1em">
-														<polygon points="0,0 0,100 100,50" fill="#FFF" class="fill-cc"/>
-													</svg>
-													Demo
-												</span>
-											</span>
-										</button>
-									</div>
-									<div id="midi-access-failed" class="error-message" hidden>
-										Failed to get MIDI access.
-										<pre id="midi-access-failed-pre"></pre>
-									</div>
-								</div>
-								<button id="troubleshoot-midi-input-button" class="popover-button" aria-haspopup="dialog" aria-expanded="false">
-									<svg fill="currentColor" height="1em" viewBox="0 0 40 40" style="vertical-align: bottom;">
-										<path
-											d="m18.4 15v-3.4h3.2v3.4h-3.2z m1.6 18.4c7.3 0 13.4-6.1 13.4-13.4s-6.1-13.4-13.4-13.4-13.4 6.1-13.4 13.4 6.1 13.4 13.4 13.4z m0-30c9.2 0 16.6 7.4 16.6 16.6s-7.4 16.6-16.6 16.6-16.6-7.4-16.6-16.6 7.4-16.6 16.6-16.6z m-1.6 25v-10h3.2v10h-3.2z">
-										</path>
-									</svg>
-									<u>MIDI device not showing up?</u>
-								</button>
-								<div id="troubleshoot-midi-input-popover" class="popover" hidden>
-									<ul class="bulleted-list">
-										<li>Make sure it's plugged into your computer and turned on.</li>
-										<li>Try <a href="JavaScript:location.reload();">refreshing the page</a>.</li>
-										<li>If that doesn't work, try unplugging it and plugging it back in.</li>
-										<li>Try restarting your computer.</li>
-									</ul>
-									<div class="popover-arrow" data-popper-arrow></div>
-								</div>
-							</fieldset>
-							<fieldset id="midi-exporting" class="ui-section">
-								<legend>Export</legend>
-								<div id="midi-exporting-clearing-controls">
-									<button class="button-functional" id="export-midi-file-button" disabled aria-keyshortcuts="Ctrl+S Meta+S">
-										<span class="button-visual">
-											Save MIDI File
-										</span>
-									</button>
-									<span id="name-or-message">
-										<span id="no-notes-recorded-message" tabindex="0">&nbsp;- No notes recorded</span>
-										<input type="text" id="recording-name-input" hidden/>
-									</span>
-									<span style="flex: 1"></span>
-									<button class="button-functional" id="clear-button" disabled>
-										<span class="button-visual">
-											Clear
-										</span>
-									</button>
-									<button class="button-functional" id="undo-clear-button" hidden>
-										<span class="button-visual">
-											Undo Clear
-										</span>
-									</button>
-								</div>
-								<br>
-								<div class="error-message" hidden id="recovery-error-message"></div>
-								<!-- Modal libraries like to replace your buttons' id attributes apparently... -->
-								<!-- Also there's no equivalent data-modal-hidden to make it not unhide the button if it's hidden -->
-								<button class="button-functional show-recovery-button" disabled data-modal-disabled data-modal-open="recovery-modal-content">
-									<span class="button-visual">
-										<span class="loading-indicator"></span>
-										Recover Recordings
-									</span>
-								</button>
-								<div id="recovery-modal-content" hidden data-modal>
-									<div data-modal-document>
-										<h3>Recover Recordings</h3>
-										<ul id="recoverables"></ul>
-										<p id="recovery-empty-message" hidden>
-											No more recordings to recover.
-										</p>
-									</div>
-								</div>
-				
-							</fieldset>
-						
-							<div id="fullscreen-target">
-								<canvas id="midi-viz-canvas" class="element-to-transform"></canvas>
-							</div>
-						</div>
-        	`;
+	</script>
+	<script>
+		/* midi.js */
+function enableMIDI(element) {
+	const onMIDISuccess = (midiAccess) => {
+		for (var input of midiAccess.inputs.values()) input.onmidimessage = getMIDIMessage;
+	}
+	const getMIDIMessage = message => {
+		const [command, note, velocity] = message.data;
+		switch (command) {
+			case 144: // on
+				if (velocity > 0) {
+					const event = new CustomEvent('noteon', { detail: { note, velocity }});
+					element.dispatchEvent(event)
+				}
+			break;
+			case 128: // off
+				const event = new CustomEvent('noteoff', { detail: { note }});
+				element.dispatchEvent(event)
+			break;
+		}
+	}
+	if (navigator.requestMIDIAccess) {
+		navigator.requestMIDIAccess().then(onMIDISuccess, () => console.log('Could not access your MIDI devices.'));
+	}
+}
 
-			// Append mainElement to the panel
-			panel.appendChild(mainElement);
+/* audio.js */
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)
+const gainNode = audioCtx.createGain()
+const notemap = new Map();
+gainNode.connect(audioCtx.destination);
 
-			// Call setBPM function with the specified BPM
-			setBPM(bpm);
-    }
+function createOscillator(freq) {
+  const oscNode = audioCtx.createOscillator()
+  oscNode.type = 'sine'
+  oscNode.frequency.value = freq
+  oscNode.connect(gainNode)
+  return oscNode
+}
 
-    // Call addCommonCodeToPanel for each panel with the corresponding BPM
-	
-    //addCommonCodeToPanel("afoggyday", 130);
-    //addCommonCodeToPanel("bluebossa", 130);
-	//addCommonCodeToPanel("confirmation", 205);
-	addCommonCodeToPanel("donnalee", 185);
-	//addCommonCodeToPanel("giantsteps", 200);
-	//addCommonCodeToPanel("justfriends", 190);
-	
-    // Repeat for other panels
+function noteon(key) {
+  if (!key.classList.contains('keydown')) {
+    gainNode.gain.value = 0.33
+    notemap.set(key.name, createOscillator(key.dataset.freq))
+    notemap.get(key.name).start(0)
+    key.classList.add('keydown')
+  }
+}
+
+function noteoff(key) {
+  key.classList.remove('keydown')
+  const oscNode = notemap.get(key.name)
+  if (oscNode) oscNode.stop(0)
+  notemap.delete(key.name)
+}
+
+
+/* init */
+enableMIDI(midi);
+
+midi.addEventListener('noteon', (event) => {
+  const note = midi.elements[`midi_${event.detail.note}`]
+  note.style.setProperty('--v', event.detail.velocity)
+  noteon(note, [{freq: note.dataset.freq}])
+})
+
+midi.addEventListener('noteoff', (event) => {
+  const note = midi.elements[`midi_${event.detail.note}`]
+  noteoff(note)
+})
+
+midi.addEventListener('submit', event => event.preventDefault())
+
+const keys = midi.querySelectorAll('button');
+keys.forEach(key => {
+  key.addEventListener('pointerdown', event => {
+    noteon(event.target, [{freq: event.target.dataset.freq}])
+  })
+  key.addEventListener('pointerup', event => { noteoff(event.target) })
+  key.addEventListener('pointerleave', event => { noteoff(event.target) })
+})
 	</script>
 	<script src="lib/FileSaver.js"></script>
 	<script src="lib/popper-2.11.5.js"></script>
