@@ -264,13 +264,13 @@ fieldset.labeled-radio-buttons > legend {
 fieldset.ui-section {
 	border: 2px solid white;
 	border-radius: 8px;
-	background: rgba(30, 30, 30, 0.5);
+	background: #FEC96C;
 	padding: 1em;
 	/* padding-bottom: calc(1em + 1.3em / 2); - to balance with the top which has the <legend>, mathematically */
 	padding-bottom: 1.5em; /* to balance with the top which has the <legend> */
 }
 fieldset.ui-section > legend {
-	background-color: rgba(213, 164, 87, 0.9);
+	background-color: #FFDC9E;
 	color: white;
 	padding: 3px 6px;
 	border-radius: 2px;
@@ -348,19 +348,19 @@ li {
 	font-size: 14px;
 	font-weight: bold;
 	background-color: rgba(213, 164, 87, 0.7);
-	background-image: linear-gradient(100% 100% 90deg, rgba(213, 164, 87, 0.7), #7A7A7A);
+	background-image: linear-gradient(100% 100% 90deg, rgba(213, 164, 87, 0.7), #FED58F);
 	border: none;
 	border-radius: 4px;
-	box-shadow: inset 0 1px 2px rgba(255,255,255,0.2), 0 1px 0 #2D2D2D, 0 2px 0 #2D2D2D, 0 3px 0 #2C2C2C, 0 4px 0 #2A2A2A, 0 0 0 2px black, 0 4px 0 2px black, 0 0 0 3px #222, 0 4px 0 3px #222;
+	box-shadow: inset 0 1px 2px #FED58F, 0 1px 0 #2D2D2D, 0 2px 0 #2D2D2D, 0 3px 0 #2C2C2C, 0 4px 0 #2A2A2A, 0 0 0 2px black, 0 4px 0 2px black, 0 0 0 3px #222, 0 4px 0 3px #222;
 	padding: 9px 16px;
 	margin-bottom: 3px;
 	color: #ddd;
 }
 
 .button-functional:disabled .button-visual {
-	color: #555;
+	color: #FED58F;
 	background: #222;
-	box-shadow: inset 0 1px 2px rgba(255,255,255,0.05), 0 4px 0 #111, 0 0 0 2px black, 0 4px 0 2px black, 0 0 0 3px #222, 0 4px 0 3px #222;
+	box-shadow: inset 0 1px 2px #FED58F, 0 4px 0 #FED58F, 0 0 0 2px #FED58F, 0 4px 0 2px #FED58F, 0 0 0 3px #FED58F, 0 4px 0 3px #FED58F;
 }
 
 .button-functional:enabled:hover .button-visual { color: white }
@@ -368,7 +368,7 @@ li {
 .button-functional:enabled:active .button-visual {
 	margin-top: 3px;
 	margin-bottom: 0px;
-	box-shadow: inset 0 1px 2px rgba(255,255,255,0.2), 0 1px 0 #2A2A2A, 0 1px 0 2px black, 0 1px 0 3px #222;
+	box-shadow: inset 0 1px 2px #FED58F, 0 1px 0 #FED58F, 0 1px 0 2px black, 0 1px 0 3px #222;
 } 
 
 .button-functional {
@@ -462,9 +462,9 @@ input[type="number"] {
 }
 input[type="text"]:disabled,
 input[type="number"]:disabled {
-	color: #555;
+	color: #FED58F;
 	background: #111;
-	border-color: #333;
+	border-color: #FED58F;
 }
 input[type="text"]:invalid,
 input[type="number"]:invalid {
@@ -478,7 +478,7 @@ input[type="radio"]:disabled {
 }
 
 .disabled {
-	color: rgba(128, 128, 128, 0.7);
+	color: #FED58F;
 }
 .disabled svg,
 :disabled svg {
