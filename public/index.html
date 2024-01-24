@@ -436,13 +436,13 @@ function createPianoOscillators(freq) {
     const oscillators = [];
     const baseFrequency = freq;
 
-    for (let i = 0; i < 3; i++) {
+    for (let i = 1; i <= 20; i++) {
         const oscNode = audioCtx.createOscillator();
-        oscNode.type = 'sine';
-        oscNode.frequency.value = baseFrequency * (i + 1);
+        oscNode.type = 'sine'; // Change the oscillator type to 'triangle'
+        oscNode.frequency.value = baseFrequency * i;
 
         const gainNode = audioCtx.createGain();
-        gainNode.gain.value = 1 / Math.pow(i + 1, 1.7); // Adjust the gain for each harmonic
+        gainNode.gain.value = 1 / Math.pow(i, 1.5*i^2.3); // Adjust the gain for each harmonic
 
         oscNode.connect(gainNode);
         oscillators.push({ oscNode, gainNode });
@@ -466,6 +466,14 @@ const notemap = new Map();
 function noteon(key) {
     if (!key.classList.contains('keydown') && notemap.size < maxPolyphony) {
         const { oscillators, masterGainNode } = createPianoOscillators(key.dataset.freq);
+        
+        // Add an envelope to simulate piano sound with a shorter attack time
+        masterGainNode.gain.setValueAtTime(0, audioCtx.currentTime);
+        masterGainNode.gain.linearRampToValueAtTime(0.086, audioCtx.currentTime + 0.0001); // Shorten the attack time
+        
+        // Increase the sustain duration
+        masterGainNode.gain.linearRampToValueAtTime(0.1, audioCtx.currentTime + 0.3);
+
         key.classList.add('keydown');
         notemap.set(key.name, { oscillators, masterGainNode });
     }
@@ -476,7 +484,7 @@ function noteoff(key) {
     const { oscillators, masterGainNode } = notemap.get(key.name);
 
     if (oscillators) {
-        const releaseTime = audioCtx.currentTime + 0.15;
+        const releaseTime = audioCtx.currentTime + 0.06; // Adjust release time
 
         masterGainNode.gain.setValueAtTime(masterGainNode.gain.value, audioCtx.currentTime);
         masterGainNode.gain.linearRampToValueAtTime(0.01, releaseTime);
