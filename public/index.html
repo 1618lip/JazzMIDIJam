@@ -9,6 +9,8 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/tone"></script>
+    <script src="https://cdn.jsdelivr.net/npm/soundfont-player"></script>
   <link rel="icon" type="image/png" sizes="32x32" href="https://t4.ftcdn.net/jpg/03/51/20/39/240_F_351203909_Ylk0KUOOBR8IKwurq6KbZyYufzDjZrqx.jpg">
 	<link rel="manifest" href="/site.webmanifest">
 	<meta name="apple-mobile-web-app-title" content="JazzJam">
@@ -399,8 +401,10 @@
 			// getBPM();
 		}
 	</script>
+	<script src="https://cdn.jsdelivr.net/npm/tone@14.8.26/dist/Tone.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/soundfont-player@1.0.0/dist/soundfont-player.js"></script>
 	<script>
-		/* midi.js */
+	/* midi.js */
 function enableMIDI(element) {
   const onMIDISuccess = (midiAccess) => {
     for (var input of midiAccess.inputs.values()) input.onmidimessage = getMIDIMessage;
