@@ -9,8 +9,7 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/tone"></script>
-    <script src="https://cdn.jsdelivr.net/npm/soundfont-player"></script>
+  <script src="https://cdn.jsdelivr.net/npm/tone@14.8.26"></script>
   <link rel="icon" type="image/png" sizes="32x32" href="https://t4.ftcdn.net/jpg/03/51/20/39/240_F_351203909_Ylk0KUOOBR8IKwurq6KbZyYufzDjZrqx.jpg">
 	<link rel="manifest" href="/site.webmanifest">
 	<meta name="apple-mobile-web-app-title" content="JazzJam">
@@ -401,131 +400,110 @@
 			// getBPM();
 		}
 	</script>
-	<script src="https://cdn.jsdelivr.net/npm/tone@14.8.26/dist/Tone.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/soundfont-player@1.0.0/dist/soundfont-player.js"></script>
 	<script>
-	/* midi.js */
-function enableMIDI(element) {
-  const onMIDISuccess = (midiAccess) => {
-    for (var input of midiAccess.inputs.values()) input.onmidimessage = getMIDIMessage;
+console.clear();
+
+class MIDIAccess {
+  constructor(args = {}) {
+    this.onDeviceInput = args.onDeviceInput || console.log;
   }
-  const getMIDIMessage = message => {
-    const [command, note, velocity] = message.data;
-    switch (command) {
-      case 144: // on
-        if (velocity > 0) {
-          const event = new CustomEvent('noteon', { detail: { note, velocity } });
-          element.dispatchEvent(event);
-        }
-        break;
-      case 128: // off
-        const event = new CustomEvent('noteoff', { detail: { note } });
-        element.dispatchEvent(event);
-        break;
-    }
-  }
-  if (navigator.requestMIDIAccess) {
-    navigator.requestMIDIAccess().then(onMIDISuccess, () => console.log('Could not access your MIDI devices.'));
-  }
-}
 
-/* audio.js */
-const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-const masterGain = audioCtx.createGain();
-masterGain.connect(audioCtx.destination);
-
-const maxPolyphony = 7;
-
-function createPianoOscillators(freq) {
-    const oscillators = [];
-    const baseFrequency = freq;
-
-    for (let i = 1; i <= 20; i++) {
-        const oscNode = audioCtx.createOscillator();
-        oscNode.type = 'sine'; // Change the oscillator type to 'triangle'
-        oscNode.frequency.value = baseFrequency * i;
-
-        const gainNode = audioCtx.createGain();
-        gainNode.gain.value = 1 / Math.pow(i, 1.5*i^2.3); // Adjust the gain for each harmonic
-
-        oscNode.connect(gainNode);
-        oscillators.push({ oscNode, gainNode });
-    }
-
-    const masterGainNode = audioCtx.createGain();
-    masterGainNode.gain.value = 0.2;
-
-    oscillators.forEach(({ oscNode, gainNode }) => {
-        gainNode.connect(masterGainNode);
-        oscNode.start(0);
+  start() {
+    return new Promise((resolve, reject) => {
+      this._requestAccess().then(access => {
+        this.initialize(access);
+        resolve();
+      }).catch(() => reject('Something went wrong.'));
     });
+  }
 
-    masterGainNode.connect(masterGain);
+  initialize(access) {
+    const devices = access.inputs.values();
+    for (let device of devices) this.initializeDevice(device);
+  }
 
-    return { oscillators, masterGainNode };
+  initializeDevice(device) {
+    device.onmidimessage = this.onMessage.bind(this);
+  }
+  
+  onMessage(message) {
+    let [_, input, value] = message.data;
+    this.onDeviceInput({ input, value });
+  }
+
+  _requestAccess() {
+    return new Promise((resolve, reject) => {
+      if (navigator.requestMIDIAccess)
+        navigator.requestMIDIAccess()
+          .then(resolve)
+          .catch(reject);
+      else reject();
+    });
+  }
+}
+function getNoteFromMidiNumber(midiNote) {
+    const noteNames = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
+    const note = noteNames[midiNote % 12];
+    const octave = Math.floor(midiNote / 12); // Adding 3 to get the fourth octave
+    return note + octave;
+}
+class Instrument {
+  constructor() {
+    this.synth =  new Tone.Sampler({
+		urls: {
+		"C4": "C4.mp3",
+		"D#4": "Ds4.mp3",
+		"F#4": "Fs4.mp3",
+		"A4": "A4.mp3",
+	},
+	release: 1,
+	baseUrl: "https://tonejs.github.io/audio/salamander/",
+}).toDestination();
+    
+    this.filter = new Tone.Filter();
+    this.volume = new Tone.Gain();
+
+    this.synth.connect(this.filter);
+    this.filter.connect(this.volume);
+    this.volume.toDestination();
+    
+    this.filter.frequency.value = 200; // 200 - 15000
+    this.volume.gain.value = 0.8; // 0-0.8
+    
 }
 
-const notemap = new Map();
-
-function noteon(key) {
-    if (!key.classList.contains('keydown') && notemap.size < maxPolyphony) {
-        const { oscillators, masterGainNode } = createPianoOscillators(key.dataset.freq);
-        
-        // Add an envelope to simulate piano sound with a shorter attack time
-        masterGainNode.gain.setValueAtTime(0, audioCtx.currentTime);
-        masterGainNode.gain.linearRampToValueAtTime(0.086, audioCtx.currentTime + 0.0001); // Shorten the attack time
-        
-        // Increase the sustain duration
-        masterGainNode.gain.linearRampToValueAtTime(0.1, audioCtx.currentTime + 0.3);
-
-        key.classList.add('keydown');
-        notemap.set(key.name, { oscillators, masterGainNode });
-    }
+toggleSound(input, value) {
+  let method = value > 0 ? 'triggerAttack' : 'triggerRelease';
+  this.synth[method]([getNoteFromMidiNumber(input)]);
 }
 
-function noteoff(key) {
-    key.classList.remove('keydown');
-    const { oscillators, masterGainNode } = notemap.get(key.name);
-
-    if (oscillators) {
-        const releaseTime = audioCtx.currentTime + 0.06; // Adjust release time
-
-        masterGainNode.gain.setValueAtTime(masterGainNode.gain.value, audioCtx.currentTime);
-        masterGainNode.gain.linearRampToValueAtTime(0.01, releaseTime);
-
-        oscillators.forEach(({ oscNode }) => {
-            oscNode.stop(releaseTime);
-        });
-    }
-
-    notemap.delete(key.name);
+handleVolume(value) { // 0-127
+  let val = value / 127 * 0.8;
+  this.volume.gain.value = val;
 }
 
-/* init */
-enableMIDI(midi);
+handleFilter(value) { // 0-127
+  let val = value / 127 * 14800 + 200;
+  this.filter.frequency.value = val;
+}
+}
 
-midi.addEventListener('noteon', (event) => {
-  const note = midi.elements[`midi_${event.detail.note}`];
-  note.style.setProperty('--v', event.detail.velocity);
-  noteon(note, [{ freq: note.dataset.freq }]);
+// UPDATE: there is a problem in chrome with starting audio context
+//  before a user gesture. This fixes it.
+var started = false;
+document.documentElement.addEventListener('mousedown', () => {
+if (started) return;
+started = true;
+const inst = new Instrument();
+const midi = new MIDIAccess({ onDeviceInput });
+midi.start().then(() => {
+  console.log('STARTED!');
+}).catch(console.error);
+
+function onDeviceInput({ input, value }) {
+   inst.toggleSound(input, value);
+}
 });
-
-midi.addEventListener('noteoff', (event) => {
-  const note = midi.elements[`midi_${event.detail.note}`];
-  noteoff(note);
-});
-
-midi.addEventListener('submit', event => event.preventDefault());
-
-const keys = midi.querySelectorAll('button');
-keys.forEach(key => {
-  key.addEventListener('pointerdown', event => {
-    noteon(event.target, [{ freq: event.target.dataset.freq }]);
-  });
-  key.addEventListener('pointerup', event => { noteoff(event.target); });
-  key.addEventListener('pointerleave', event => { noteoff(event.target); });
-});
-
 	</script>
 	<script src="lib/FileSaver.js"></script>
 	<script src="lib/popper-2.11.5.js"></script>
