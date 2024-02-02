@@ -33,7 +33,7 @@
 					<ul>
 					<li>Fix color</li>
 					<li>Sync backing track with start of recording</li>
-					<li>Add sound when recording</li>
+					<li>Deal with Latency</li>
 					</ul>
 				</div>
 			</div>
@@ -226,6 +226,7 @@
 				</div>
 				</main>
 			</div>
+			<!--
 			<div class="right">
 				<form class="synth" id="midi" style="--synth-bgc: hsl(0, 0%, 0%);--_h:216;">
 					<div id="kb49" class="kb kb--49"><button aria-label="C3" data-freq="130.8127826502993" name="midi_48" "="" style="--gcs:1" type="button>"></button>
@@ -277,8 +278,9 @@
 				<button aria-label="A#6" data-freq="1864.6550460723597" name="midi_94" "="" style="--gcs:81" type="button>"></button>
 				<button aria-label="B6" data-freq="1975.533205024496" name="midi_95" "="" style="--gcs:82" type="button>"></button>
 				<button aria-label="C7" data-freq="2093.004522404789" name="midi_96" "="" style="--gcs:85" type="button>"></button></div>
-				</form>
+				</form>	
 			</div>
+		-->
 		</div>
 	</div>
 	<script>
@@ -361,12 +363,6 @@
                 document.getElementById(activeButtonId).disabled = false;
             }
         }
-
-        if (isRecording) {
-            console.log('Start recording MIDI...');
-        } else {
-            console.log('Stop recording MIDI.');
-        }
     }
 		let countdownValue = 4; // Set the countdown duration in seconds
 
@@ -387,6 +383,7 @@
 					document.getElementById('audioPlayer').style.display = 'block';
 					document.getElementById('countdown').style.display = 'none';
 					document.getElementById('audioPlayer').play();
+					this.synth[triggerAttack](["C1"]);
 					clearInterval(countdownInterval);
 				}
 			}, 1000);
@@ -399,111 +396,120 @@
 			// You can call the function to handle the BPM input if needed
 			// getBPM();
 		}
-	</script>
-	<script>
-console.clear();
+		class MIDIAccess {
+		constructor(args = {}) {
+			this.onDeviceInput = args.onDeviceInput || console.log;
+		}
 
-class MIDIAccess {
-  constructor(args = {}) {
-    this.onDeviceInput = args.onDeviceInput || console.log;
-  }
+		start() {
+			return new Promise((resolve, reject) => {
+			this._requestAccess().then(access => {
+				this.initialize(access);
+				resolve();
+			}).catch(() => reject('Something went wrong.'));
+			});
+		}
 
-  start() {
-    return new Promise((resolve, reject) => {
-      this._requestAccess().then(access => {
-        this.initialize(access);
-        resolve();
-      }).catch(() => reject('Something went wrong.'));
-    });
-  }
+		initialize(access) {
+			const devices = access.inputs.values();
+			for (let device of devices) this.initializeDevice(device);
+		}
 
-  initialize(access) {
-    const devices = access.inputs.values();
-    for (let device of devices) this.initializeDevice(device);
-  }
+		initializeDevice(device) {
+			device.onmidimessage = this.onMessage.bind(this);
+		}
+		
+		onMessage(message) {
+			let [_, input, value] = message.data;
+			this.onDeviceInput({ input, value });
+		}
 
-  initializeDevice(device) {
-    device.onmidimessage = this.onMessage.bind(this);
-  }
-  
-  onMessage(message) {
-    let [_, input, value] = message.data;
-    this.onDeviceInput({ input, value });
-  }
+		_requestAccess() {
+			return new Promise((resolve, reject) => {
+			if (navigator.requestMIDIAccess)
+				navigator.requestMIDIAccess()
+				.then(resolve)
+				.catch(reject);
+			else reject();
+			});
+		}
+		}
+		function getNoteFromMidiNumber(midiNote) {
+			const noteNames = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
+			const note = noteNames[midiNote % 12];
+			const octave = Math.floor(midiNote / 12); // Adding 3 to get the fourth octave
+			return note + octave;
+		}
+		class Instrument {
+		constructor() {
+			this.synth =  new Tone.Sampler({
+				urls: {
+				"C3": "C3.mp3",
+				"D#3": "Ds3.mp3",
+				"F#3": "Fs3.mp3",
+				"A3": "A3.mp3",
+				"C4": "C4.mp3",
+				"D#4": "Ds4.mp3",
+				"F#4": "Fs4.mp3",
+				"A4": "A4.mp3",
+				"C5": "C5.mp3",
+				"D#5": "Ds5.mp3",
+				"F#5": "Fs5.mp3",
+				"A5": "A5.mp3",
+				"C6": "C6.mp3",
+				"D#6": "Ds6.mp3",
+				"F#6": "Fs6.mp3",
+				"A6": "A6.mp3",
+			},
+			release: 1,
+			baseUrl: "https://tonejs.github.io/audio/salamander/",
+		}).toDestination();
+			
+			this.filter = new Tone.Filter();
+			this.volume = new Tone.Gain();
 
-  _requestAccess() {
-    return new Promise((resolve, reject) => {
-      if (navigator.requestMIDIAccess)
-        navigator.requestMIDIAccess()
-          .then(resolve)
-          .catch(reject);
-      else reject();
-    });
-  }
-}
-function getNoteFromMidiNumber(midiNote) {
-    const noteNames = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
-    const note = noteNames[midiNote % 12];
-    const octave = Math.floor(midiNote / 12); // Adding 3 to get the fourth octave
-    return note + octave;
-}
-class Instrument {
-  constructor() {
-    this.synth =  new Tone.Sampler({
-		urls: {
-		"C4": "C4.mp3",
-		"D#4": "Ds4.mp3",
-		"F#4": "Fs4.mp3",
-		"A4": "A4.mp3",
-	},
-	release: 1,
-	baseUrl: "https://tonejs.github.io/audio/salamander/",
-}).toDestination();
-    
-    this.filter = new Tone.Filter();
-    this.volume = new Tone.Gain();
+			this.synth.connect(this.filter);
+			this.filter.connect(this.volume);
+			this.volume.toDestination();
+			
+			this.filter.frequency.value = 200; // 200 - 15000
+			this.volume.gain.value = 0.8; // 0-0.8
+			
+		}
 
-    this.synth.connect(this.filter);
-    this.filter.connect(this.volume);
-    this.volume.toDestination();
-    
-    this.filter.frequency.value = 200; // 200 - 15000
-    this.volume.gain.value = 0.8; // 0-0.8
-    
-}
+		toggleSound(input, value) {
+		let method = value > 0 ? 'triggerAttack' : 'triggerRelease';
+		this.synth[method]([getNoteFromMidiNumber(input)]);
+		}
 
-toggleSound(input, value) {
-  let method = value > 0 ? 'triggerAttack' : 'triggerRelease';
-  this.synth[method]([getNoteFromMidiNumber(input)]);
-}
+		handleVolume(value) { // 0-127
+		let val = value / 127 * 0.8;
+		this.volume.gain.value = val;
+		}
 
-handleVolume(value) { // 0-127
-  let val = value / 127 * 0.8;
-  this.volume.gain.value = val;
-}
+		handleFilter(value) { // 0-127
+		let val = value / 127 * 14800 + 200;
+		this.filter.frequency.value = val;
+		}
+		}
 
-handleFilter(value) { // 0-127
-  let val = value / 127 * 14800 + 200;
-  this.filter.frequency.value = val;
-}
-}
+		// UPDATE: there is a problem in chrome with starting audio context
+		//  before a user gesture. This fixes it.
+		var started = false;
+		document.documentElement.addEventListener('mousedown', () => {
+		if (started) return;
+		started = true;
+		const inst = new Instrument();
+		const midi = new MIDIAccess({ onDeviceInput });
+		midi.start().then(() => {
+		console.log('STARTED!');
+		}).catch(console.error);
 
-// UPDATE: there is a problem in chrome with starting audio context
-//  before a user gesture. This fixes it.
-var started = false;
-document.documentElement.addEventListener('mousedown', () => {
-if (started) return;
-started = true;
-const inst = new Instrument();
-const midi = new MIDIAccess({ onDeviceInput });
-midi.start().then(() => {
-  console.log('STARTED!');
-}).catch(console.error);
-
-function onDeviceInput({ input, value }) {
-   inst.toggleSound(input, value);
-}
-});
+		function onDeviceInput({ input, value }) {
+		inst.toggleSound(input, value);
+		}
+		});
+			
 	</script>
 	<script src="lib/FileSaver.js"></script>
 	<script src="lib/popper-2.11.5.js"></script>
